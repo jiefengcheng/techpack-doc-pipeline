@@ -4,6 +4,8 @@ Functional modules only. Implementation libraries are interchangeable.
 
 This pipeline is for a **screenshot-style** pack: one spec table, one color artwork, one line drawing.
 
+The **why** and the three conceptual pipelines (layout, hard OCR, domain translation) are in [APPROACH.md](APPROACH.md). This file is the module line and the inference-call shapes.
+
 ## Main line
 
 ```mermaid

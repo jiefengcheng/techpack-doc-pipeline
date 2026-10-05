@@ -2,7 +2,7 @@
 
 One **screenshot-style** fashion tech pack in. A ruled BOM spreadsheet, an artwork crop, a drawing crop, and an **EN + CN factory sheet** out. Runs locally. No cloud API required.
 
-Live demo: [jiefengcheng.github.io/techpack-doc-pipeline](https://jiefengcheng.github.io/techpack-doc-pipeline/). Spreadsheet only: [table_bilingual.html](https://jiefengcheng.github.io/techpack-doc-pipeline/table_bilingual.html).
+Live demo: [jiefengcheng.github.io/techpack-doc-pipeline](https://jiefengcheng.github.io/techpack-doc-pipeline/). Considered path (layout, hard OCR, domain translation): [APPROACH.md](APPROACH.md) · [live diagrams](https://jiefengcheng.github.io/techpack-doc-pipeline/approach.html). Spreadsheet: [table_bilingual.html](https://jiefengcheng.github.io/techpack-doc-pipeline/table_bilingual.html).
 
 ---
 
@@ -75,4 +75,4 @@ uv run techpack --ui
 - Built for **one table + one artwork + one drawing** on a screenshot pack, not a native-text PDF.
 - Table OCR first pass is line-grid + Vision. Hard cells are an architectural Table VL call (`promptLabel: table`) to a local inference service (Mac: Foundation Models + Core ML). Residual leftover English is a Qwen chat call to the same service. Neither call is wired in this repo.
 
-Architecture (modules, not vendor names): [ARCHITECTURE.md](ARCHITECTURE.md).
+Conceptual pipelines and the path to success: [APPROACH.md](APPROACH.md). Module contracts: [ARCHITECTURE.md](ARCHITECTURE.md).

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tech-pack pipeline — considered path</title>
+  <style>
+    :root { color-scheme: light; }
+    body {
+      margin: 0;
+      background: #f4f4f2;
+      color: #111;
+      font: 16px/1.45 ui-sans-serif, system-ui, sans-serif;
+    }
+    header, main { max-width: 1120px; margin: 0 auto; padding: 28px 20px; }
+    header { padding-bottom: 8px; }
+    h1 { font-size: 28px; font-weight: 650; margin: 0 0 8px; }
+    h2 { font-size: 18px; font-weight: 650; margin: 28px 0 10px; }
+    h3 { font-size: 15px; font-weight: 650; margin: 20px 0 8px; }
+    p, li { color: #222; }
+    .lede { font-size: 18px; max-width: 44rem; margin: 0 0 16px; }
+    .meta { color: #444; font-size: 14px; }
+    a { color: #111; }
+    .diagram {
+      background: #fff;
+      border: 1px solid #222;
+      padding: 16px 12px;
+      margin: 12px 0 20px;
+      overflow: auto;
+    }
+    .diagram .mermaid { margin: 0 auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      margin: 12px 0 20px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #222;
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { font-weight: 650; }
+    code { font-size: 13px; }
+    .note {
+      max-width: 44rem;
+      color: #333;
+    }
+    @media (max-width: 800px) {
+      .diagram { padding: 10px 4px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Considered path</h1>
+    <p class="lede">Three pipelines in a fixed order. The live demo is a first-pass result. This page is why the solution holds: split the page, handle hard OCR as one method, then translate with factory knowledge — not one model over the whole screenshot.</p>
+    <p class="meta"><a href="index.html">demo result</a> · <a href="table_bilingual.html">spreadsheet</a> · <a href="https://github.com/jiefengcheng/techpack-doc-pipeline/blob/main/APPROACH.md">same narrative on GitHub</a></p>
+  </header>
+  <main>
+    <p class="note">A screenshot pack has no PDF text tokens. The page is three products: a ruled BOM (text), color artwork (pixels), and a line drawing (geometry). OCR, translation, or layout alone each mix those products. Order is the method.</p>
+
+    <div class="diagram" role="img" aria-label="Overview: layout split, then hard OCR on the table, then domain translation">
+      <pre class="mermaid">
+flowchart TD
+  pack[Screenshot pack]
+  split[1 Layout split]
+  ocr[2 Hard OCR method]
+  gloss[3 Domain translation]
+  sheet[EN + CN factory sheet]
+  pack --> split
+  split -->|ruled table only| ocr
+  split -->|artwork| crop[Crop. Stop.]
+  split -->|drawing| draw[Crop + optional callouts]
+  ocr --> gloss
+  gloss --> sheet
+      </pre>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Pipeline</th>
+          <th>Strength</th>
+          <th>What must not happen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Layout / segmentation</strong></td>
+          <td>Three exclusive regions. Detector is interchangeable.</td>
+          <td>Artwork sent to OCR. Table treated as a picture.</td>
+        </tr>
+        <tr>
+          <td><strong>2. Difficult OCR</strong></td>
+          <td>One method for unbounded outliers.</td>
+          <td>A catalog of failure cases. A second whole-page pass.</td>
+        </tr>
+        <tr>
+          <td><strong>3. Domain translation</strong></td>
+          <td>Glossary and freezes before any model.</td>
+          <td>An LLM rewriting <code>YKK: 316</code>, <code>97%</code>, or <code>DTM</code>.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>1. Reliable layout / segmentation</h2>
+    <p class="note">Decide what kind of thing each region is before anyone reads a glyph. The hard error is applying the wrong tool: OCR on paint, a document parse on stitches, or a text detector that never sees ruling lines.</p>
+    <div class="diagram" role="img" aria-label="Layout split into table, artwork crop-only, and drawing">
+      <pre class="mermaid">
+flowchart TD
+  page[Full page image]
+  page --> geom[Page geometry]
+  geom --> propose[Region proposals]
+  propose --> kind{What is this region?}
+  kind -->|ruled lines + cell grid| table[Table]
+  kind -->|color-rich, not a grid| art[Artwork]
+  kind -->|ink on paper, stitches / callouts| draw[Drawing]
+  art --> stop[Crop only. Image stays an image.]
+  draw --> labels[Crop. Optional callout OCR. Not the BOM.]
+  table --> next[Hand the crop to the OCR method]
+      </pre>
+    </div>
+    <ul>
+      <li><strong>Split before read.</strong> Layout is geometry. The contract is three boxes, not a vendor.</li>
+      <li><strong>Artwork never enters the text path.</strong> No OCR, no confidence map, no translation.</li>
+      <li><strong>Drawing is not a BOM.</strong> Callouts may be read. They do not go through the factory glossary.</li>
+      <li><strong>The table is a grid first.</strong> Ruling lines define cells. Text is filled into those cells.</li>
+    </ul>
+    <p class="meta">The current demo already shows this split: red = table, blue = artwork, teal = drawing.</p>
+
+    <h2>2. Difficult OCR cases</h2>
+    <p class="note">Table OCR failures are not a closed list — watermark through a glyph, tiny type, a spanning header, a digit that looks like O, a cell that reads its neighbor. Publishing a case list becomes the next miss. The path is one method: score, mark, same Table VL call, typed lock last.</p>
+    <div class="diagram" role="img" aria-label="Hard OCR method: grid, score, mark, Table VL, typed lock">
+      <pre class="mermaid">
+flowchart TD
+  crop[Table crop]
+  crop --> grid[Ruling lines → cell geometry]
+  grid --> pass1[First-pass cell OCR]
+  pass1 --> score[Score every cell]
+  score --> overlay[Confidence overlay]
+  overlay --> ok{Trusted?}
+  ok -->|yes| locked[Locked cell text]
+  ok -->|no| mark[User marks the cell]
+  mark --> vl[Same Table VL call]
+  vl --> still{Still wrong?}
+  still -->|no| locked
+  still -->|yes| type[Human typed lock]
+  type --> locked
+      </pre>
+    </div>
+    <ul>
+      <li><strong>Geometry is structural.</strong> A wrong glyph does not move the cell.</li>
+      <li><strong>Uncertainty is a surface.</strong> Green → red on the same cells the factory will read. Silent blanks can be marked.</li>
+      <li><strong>Rescan is the same call.</strong> Table VL, <code>promptLabel: table</code>, on a local service. On a Mac: Foundation Models + Core ML.</li>
+      <li><strong>Typed lock is last.</strong> Artwork and drawing stay out of this loop.</li>
+    </ul>
+    <p class="meta">Not wired in the demo. The live table is still first-pass Vision + line-grid. The HTTP shape is in <a href="https://github.com/jiefengcheng/techpack-doc-pipeline/blob/main/ARCHITECTURE.md">ARCHITECTURE.md</a>.</p>
+
+    <h2>3. Ruled table translation with domain knowledge</h2>
+    <p class="note">Same cells, English over Simplified Chinese, without breaking factory tokens. A general translator will rewrite the order: <code>97%</code>, <code>5.5 oz</code>, <code>#5</code>, <code>YKK: 316</code>, <code>DTM</code>, <code>CB</code>.</p>
+    <div class="diagram" role="img" aria-label="Glossary lock and freeze before residual Qwen">
+      <pre class="mermaid">
+flowchart TD
+  cells[Locked BOM cells]
+  cells --> freeze[Freeze digits, units, vendor codes]
+  freeze --> gloss[Glossary lock]
+  gloss --> left{Leftover English?}
+  left -->|no| sheet[Same cell: EN over CN]
+  left -->|yes| qwen[Qwen residual call]
+  qwen --> sheet
+      </pre>
+    </div>
+    <ul>
+      <li><strong>Glossary first, in-process.</strong> <code>DTM</code> → 同色配线, <code>CB</code> → 后中, <code>Swift Tack</code> → 打枪条. Data, not prompt text.</li>
+      <li><strong>Freeze before replace.</strong> Digits, units, and vendor codes are copied through. The model never sees them.</li>
+      <li><strong>Residual only.</strong> Leftover English is a Qwen call to the same local service as Table VL.</li>
+      <li><strong>Same grid.</strong> No reflow. Artwork is not translated.</li>
+    </ul>
+    <p class="meta">On the sample pack the glossary lock finishes the sheet: 119 hits, 32 frozen spans, 0 leftover English. Residual Qwen is for the next pack that has unknown prose.</p>
+
+    <h2>Built now vs the path</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Piece</th>
+          <th>In the live demo</th>
+          <th>On the path</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Layout split</td>
+          <td>Yes</td>
+          <td>Same contract; detector interchangeable</td>
+        </tr>
+        <tr>
+          <td>Artwork crop only</td>
+          <td>Yes</td>
+          <td>Stays crop only</td>
+        </tr>
+        <tr>
+          <td>Ruled grid + first-pass OCR</td>
+          <td>Yes; header still imperfect</td>
+          <td>Hard cells go to Table VL</td>
+        </tr>
+        <tr>
+          <td>Confidence overlay + mark → rescan</td>
+          <td>No</td>
+          <td>Next table-QA surface</td>
+        </tr>
+        <tr>
+          <td>Table VL / residual Qwen calls</td>
+          <td>No — architectural</td>
+          <td>Local service; Mac Foundation Models + Core ML</td>
+        </tr>
+        <tr>
+          <td>Glossary lock + EN/CN sheet</td>
+          <td>Yes</td>
+          <td>Same; VN / TH later</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="meta">Further illustration of these diagrams can be developed without waiting for the demo to wire every box.</p>
+  </main>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "base",
+      themeVariables: {
+        background: "#ffffff",
+        primaryColor: "#ffffff",
+        primaryTextColor: "#111111",
+        primaryBorderColor: "#222222",
+        lineColor: "#222222",
+        secondaryColor: "#f4f4f2",
+        tertiaryColor: "#ffffff",
+        fontFamily: "ui-sans-serif, system-ui, sans-serif",
+      },
+    });
+  </script>
+</body>
+</html>

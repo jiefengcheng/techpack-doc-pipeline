@@ -62,8 +62,21 @@
     }
     .facts strong { display: block; font-size: 20px; }
     .facts span { font-size: 13px; color: #444; }
+    .path {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 8px 0 0;
+    }
+    .path div {
+      background: #fff;
+      border: 1px solid #222;
+      padding: 12px 14px;
+    }
+    .path strong { display: block; margin-bottom: 4px; }
+    .path span { font-size: 13px; color: #333; }
     @media (max-width: 800px) {
-      .row, .row.three, .facts { grid-template-columns: 1fr; }
+      .row, .row.three, .facts, .path { grid-template-columns: 1fr; }
       iframe { height: 640px; }
     }
   </style>
@@ -72,7 +85,7 @@
   <header>
     <h1>Tech-pack pipeline</h1>
     <p class="lede">One screenshot-style fashion tech pack in. A ruled BOM grid, an artwork crop, a drawing crop, and a bilingual factory sheet out. Local. No cloud required.</p>
-    <p class="meta">Live result from <code>docs/sample/techpack.png</code> · <a href="https://github.com/jiefengcheng/techpack-doc-pipeline">source on GitHub</a> · <a href="table_bilingual.html">open spreadsheet only</a></p>
+    <p class="meta">Live result from <code>docs/sample/techpack.png</code> · <a href="approach.html">considered path (diagrams)</a> · <a href="https://github.com/jiefengcheng/techpack-doc-pipeline">source on GitHub</a> · <a href="table_bilingual.html">open spreadsheet only</a></p>
     <div class="facts">
       <div><strong>3</strong><span>regions: table, artwork, drawing</span></div>
       <div><strong>119</strong><span>glossary locks EN → CN</span></div>
@@ -81,6 +94,23 @@
     </div>
   </header>
   <main>
+    <h2>Considered path</h2>
+    <p class="meta">The demo below is a first-pass result. The strength is three pipelines in order — even where this page does not yet run the later boxes. <a href="approach.html">Full diagrams and narrative</a>.</p>
+    <div class="path">
+      <div>
+        <strong>1. Layout / segmentation</strong>
+        <span>Split table, artwork, and drawing before anyone reads a glyph. Artwork is crop only. The table is a grid first.</span>
+      </div>
+      <div>
+        <strong>2. Difficult OCR</strong>
+        <span>Outliers are unbounded. One method: score the cell, mark, same Table VL call, typed lock last. Not a case list.</span>
+      </div>
+      <div>
+        <strong>3. Domain translation</strong>
+        <span>Glossary and frozen tokens before any model. Residual Qwen sees leftover prose only. Same cells, EN over CN.</span>
+      </div>
+    </div>
+
     <h2>1. Input</h2>
     <figure>
       <img src="source.jpg" alt="Original screenshot-style tech pack">
