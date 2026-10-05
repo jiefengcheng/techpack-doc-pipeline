@@ -2,9 +2,7 @@
 
 One **screenshot-style** fashion tech pack in. A ruled BOM spreadsheet, an artwork crop, a drawing crop, and an **EN + CN factory sheet** out. Runs locally. No cloud API required.
 
-This repository is **private**. The sample pack is client material. GitHub has no “anyone with the link” mode: only invited collaborators can open the repo.
-
-Open the demo locally after clone: `docs/index.html` and `docs/table_bilingual.html`.
+Live demo: [jiefengcheng.github.io/techpack-doc-pipeline](https://jiefengcheng.github.io/techpack-doc-pipeline/). Spreadsheet only: [table_bilingual.html](https://jiefengcheng.github.io/techpack-doc-pipeline/table_bilingual.html).
 
 ---
 
@@ -18,9 +16,9 @@ A tech pack that is a **PNG inside a PDF** (or a plain screenshot) has no PDF te
 | **Artwork** | Crop only. Never OCR. Never translate. |
 | **Drawing** | Crop. Optional stitch/callout OCR. Not sent through the BOM glossary. |
 
-Glossary lock is deterministic and runs **before** any model: `DTM` → 同色配线, `CB` → 后中, `Swift Tack` → 打枪条. Digits, units, and vendor codes stay frozen (`97%`, `5.5 oz`, `60"`, `#5`, `YKK: 316`, `N/A`). Leftover prose can go to a local instruct model **if one is already running**; nothing is downloaded and Docker is not started.
+Glossary lock is deterministic and runs **before** any model: `DTM` → 同色配线, `CB` → 后中, `Swift Tack` → 打枪条. Digits, units, and vendor codes stay frozen (`97%`, `5.5 oz`, `60"`, `#5`, `YKK: 316`, `N/A`). Leftover prose is a Qwen call on the same local inference service (architectural, not wired).
 
-On the sample pack: **119 glossary hits, 32 frozen spans, 0 leftover English**.
+Leftover prose after glossary lock is the same pattern: a Qwen chat call to that local service, not a model in this repo.
 
 ## Demo result
 
@@ -36,7 +34,7 @@ Layout split:
 |---|---|
 | ![Artwork](docs/artwork.jpg) | ![Drawing](docs/drawing.jpg) |
 
-Bilingual factory sheet (English over Chinese in each cell): open `docs/table_bilingual.html` after clone.
+Bilingual factory sheet (English over Chinese in each cell): [open the live grid](https://jiefengcheng.github.io/techpack-doc-pipeline/table_bilingual.html).
 
 Examples from that grid:
 
@@ -75,7 +73,6 @@ uv run techpack --ui
 ## Honest limits
 
 - Built for **one table + one artwork + one drawing** on a screenshot pack, not a native-text PDF.
-- Table OCR is still a single pass. Header cells can merge. Watermarks can blank a glyph. The next product surface is confidence overlay → mark → cell rescan → typed lock.
-- VN / TH glossaries are not in yet. Residual LLM is optional and off unless a local model is already serving.
+- Table OCR first pass is line-grid + Vision. Hard cells are an architectural Table VL call (`promptLabel: table`) to a local inference service (Mac: Foundation Models + Core ML). Residual leftover English is a Qwen chat call to the same service. Neither call is wired in this repo.
 
 Architecture (modules, not vendor names): [ARCHITECTURE.md](ARCHITECTURE.md).
