@@ -1,0 +1,28 @@
+[project]
+name = "techpack-doc-pipeline"
+version = "0.1.0"
+description = "Image-first fashion tech-pack pipeline: reconstruct the BOM grid, crop artwork, glossary-lock EN→CN."
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "docling>=2.0",
+    "pillow>=11.0",
+    "numpy>=2.0",
+    "gradio>=5.0",
+    "ocrmac>=1.0; sys_platform == 'darwin'",
+    "rapid-table>=3.0",
+    "rapidocr>=3.0",
+    "img2table>=2.0.0",
+]
+
+[project.scripts]
+techpack = "techpack_pipeline.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+dev-mode-dirs = ["src"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/techpack_pipeline"]

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tech-pack pipeline — demo</title>
+  <style>
+    :root { color-scheme: light; }
+    body {
+      margin: 0;
+      background: #f4f4f2;
+      color: #111;
+      font: 16px/1.45 ui-sans-serif, system-ui, sans-serif;
+    }
+    header, main { max-width: 1120px; margin: 0 auto; padding: 28px 20px; }
+    header { padding-bottom: 8px; }
+    h1 { font-size: 28px; font-weight: 650; margin: 0 0 8px; }
+    h2 { font-size: 18px; font-weight: 650; margin: 28px 0 10px; }
+    p, li { color: #222; }
+    .lede { font-size: 18px; max-width: 42rem; margin: 0 0 16px; }
+    .meta { color: #444; font-size: 14px; }
+    a { color: #111; }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .row.three { grid-template-columns: 1fr 1fr 1fr; }
+    figure {
+      margin: 0;
+      background: #fff;
+      border: 1px solid #222;
+    }
+    figure img { display: block; width: 100%; height: auto; }
+    figcaption {
+      padding: 8px 10px;
+      font-size: 13px;
+      border-top: 1px solid #ddd;
+    }
+    .sheet {
+      background: #fff;
+      border: 1px solid #222;
+      overflow: auto;
+    }
+    iframe {
+      display: block;
+      width: 100%;
+      height: 920px;
+      border: 0;
+      background: #fff;
+    }
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin: 16px 0 8px;
+    }
+    .facts div {
+      background: #fff;
+      border: 1px solid #222;
+      padding: 10px 12px;
+    }
+    .facts strong { display: block; font-size: 20px; }
+    .facts span { font-size: 13px; color: #444; }
+    @media (max-width: 800px) {
+      .row, .row.three, .facts { grid-template-columns: 1fr; }
+      iframe { height: 640px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Tech-pack pipeline</h1>
+    <p class="lede">One screenshot-style fashion tech pack in. A ruled BOM grid, an artwork crop, a drawing crop, and a bilingual factory sheet out. Local. No cloud required.</p>
+    <p class="meta">Live result from <code>docs/sample/techpack.png</code> · <a href="https://github.com/jiefengcheng/techpack-doc-pipeline">source on GitHub</a> · <a href="table_bilingual.html">open spreadsheet only</a></p>
+    <div class="facts">
+      <div><strong>3</strong><span>regions: table, artwork, drawing</span></div>
+      <div><strong>119</strong><span>glossary locks EN → CN</span></div>
+      <div><strong>32</strong><span>digits / units / codes frozen</span></div>
+      <div><strong>0</strong><span>leftover English after lock</span></div>
+    </div>
+  </header>
+  <main>
+    <h2>1. Input</h2>
+    <figure>
+      <img src="source.jpg" alt="Original screenshot-style tech pack">
+      <figcaption>Screenshot pack — not a text PDF. One spec table, one colorway artwork, one line drawing.</figcaption>
+    </figure>
+
+    <h2>2. Layout split</h2>
+    <figure>
+      <img src="overlay.jpg" alt="Page overlay with table, artwork, and drawing boxes">
+      <figcaption>Red = ruled table. Blue = artwork (crop only, never OCR). Teal = drawing.</figcaption>
+    </figure>
+    <div class="row" style="margin-top:12px">
+      <figure>
+        <img src="artwork.jpg" alt="Artwork crop">
+        <figcaption>Artwork crop. Color stays an image.</figcaption>
+      </figure>
+      <figure>
+        <img src="drawing.jpg" alt="Line drawing crop">
+        <figcaption>Drawing crop. Optional callout OCR, not BOM translation.</figcaption>
+      </figure>
+    </div>
+
+    <h2>3. Bilingual factory sheet</h2>
+    <p class="meta">Same grid as the page. English on top, Chinese under it. <code>DTM</code> → 同色配线, <code>CB</code> → 后中, <code>Swift Tack</code> → 打枪条. Values such as <code>97%</code>, <code>5.5 oz</code>, <code>YKK: 316</code>, and <code>#5</code> are not rewritten.</p>
+    <div class="sheet">
+      <iframe src="table_bilingual.html" title="Bilingual BOM spreadsheet"></iframe>
+    </div>
+  </main>
+</body>
+</html>
