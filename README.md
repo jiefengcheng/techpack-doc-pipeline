@@ -2,7 +2,9 @@
 
 One **screenshot-style** fashion tech pack in. A ruled BOM spreadsheet, an artwork crop, a drawing crop, and an **EN + CN factory sheet** out. Runs locally. No cloud API required.
 
-**[Live demo](https://jiefengcheng.github.io/techpack-doc-pipeline/)** · sample pack, layout overlay, crops, and the bilingual table in the browser.
+This repository is **private**. The sample pack is client material. GitHub has no “anyone with the link” mode: only invited collaborators can open the repo.
+
+Open the demo locally after clone: `docs/index.html` and `docs/table_bilingual.html`.
 
 ---
 
@@ -34,9 +36,7 @@ Layout split:
 |---|---|
 | ![Artwork](docs/artwork.jpg) | ![Drawing](docs/drawing.jpg) |
 
-Bilingual factory sheet (English over Chinese in each cell):
-
-**[Open the spreadsheet](https://jiefengcheng.github.io/techpack-doc-pipeline/table_bilingual.html)**
+Bilingual factory sheet (English over Chinese in each cell): open `docs/table_bilingual.html` after clone.
 
 Examples from that grid:
 
@@ -50,7 +50,7 @@ Examples from that grid:
 Needs Python 3.11–3.13. On macOS, cell OCR uses Apple Vision.
 
 ```bash
-git clone https://github.com/jiefengcheng/techpack-doc-pipeline.git
+git clone git@github.com:jiefengcheng/techpack-doc-pipeline.git
 cd techpack-doc-pipeline
 uv sync --python 3.12
 uv run techpack docs/sample/techpack.png
