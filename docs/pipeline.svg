@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 820" role="img" aria-labelledby="title desc">
+  <title id="title">Tech-pack pipeline</title>
+  <desc id="desc">Screenshot pack splits into table, artwork, and drawing. The three cells stay the same size. Mark to rescan sits as a loop on top of Ruled table only, then glossary lock and a bilingual factory sheet.</desc>
+  <style>
+    .card { fill: #fff; stroke: #111; stroke-width: 1.25; }
+    .card-blue { fill: #eef3f8; stroke: #111; stroke-width: 1.25; }
+    .label { fill: #111; font: 600 14px ui-sans-serif, system-ui, sans-serif; }
+    .sub { fill: #444; font: 400 12px ui-sans-serif, system-ui, sans-serif; }
+    .loop { fill: none; stroke: #111; stroke-width: 1.5; }
+    .loop-text { fill: #111; font: 600 12px ui-sans-serif, system-ui, sans-serif; }
+    .arrow { fill: none; stroke: #111; stroke-width: 1.25; }
+    @media (prefers-color-scheme: dark) {
+      .card { fill: #161616; stroke: #e8e8e8; }
+      .card-blue { fill: #1b2833; stroke: #e8e8e8; }
+      .label, .loop-text { fill: #f2f2f2; }
+      .sub { fill: #bbb; }
+      .loop, .arrow { stroke: #e8e8e8; }
+    }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0 L8 4 L0 8 Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+
+  <rect class="card" x="250" y="16" width="220" height="44" rx="2"/>
+  <text class="label" x="360" y="44" text-anchor="middle">Screenshot pack</text>
+  <path class="arrow" d="M360 60 L360 84" marker-end="url(#arrow)"/>
+
+  <rect class="card" x="250" y="86" width="220" height="44" rx="2"/>
+  <text class="label" x="360" y="114" text-anchor="middle">Layout split</text>
+  <path class="arrow" d="M360 130 L360 168"/>
+  <path class="arrow" d="M360 168 L130 168 L130 214" marker-end="url(#arrow)"/>
+  <path class="arrow" d="M360 168 L360 214" marker-end="url(#arrow)"/>
+  <path class="arrow" d="M360 168 L590 168 L590 214" marker-end="url(#arrow)"/>
+
+  <!-- Mark ù rescan sits on Ruled table only -->
+  <path class="loop" d="M200 230 C200 186 60 186 60 228" marker-end="url(#arrow)"/>
+  <text class="loop-text" x="130" y="178" text-anchor="middle">Mark ù rescan</text>
+
+  <rect class="card" x="30" y="216" width="200" height="108" rx="2"/>
+  <text class="label" x="130" y="250" text-anchor="middle">Ruled table</text>
+  <text class="sub" x="130" y="274" text-anchor="middle">Grid reconstruct</text>
+  <text class="sub" x="130" y="294" text-anchor="middle">Cell OCR</text>
+
+  <rect class="card" x="260" y="216" width="200" height="108" rx="2"/>
+  <text class="label" x="360" y="250" text-anchor="middle">Artwork</text>
+  <text class="sub" x="360" y="274" text-anchor="middle">Crop only</text>
+  <text class="sub" x="360" y="294" text-anchor="middle">No OCR</text>
+
+  <rect class="card" x="490" y="216" width="200" height="108" rx="2"/>
+  <text class="label" x="590" y="250" text-anchor="middle">Drawing</text>
+  <text class="sub" x="590" y="274" text-anchor="middle">Crop</text>
+  <text class="sub" x="590" y="294" text-anchor="middle">Callout OCR</text>
+
+  <path class="arrow" d="M130 324 L130 360 L360 360 L360 384" marker-end="url(#arrow)"/>
+  <path class="arrow" d="M360 324 L360 384"/>
+  <path class="arrow" d="M590 324 L590 360 L360 360"/>
+
+  <rect class="card" x="230" y="386" width="260" height="44" rx="2"/>
+  <text class="label" x="360" y="414" text-anchor="middle">Locked BOM cells</text>
+  <path class="arrow" d="M360 430 L360 454" marker-end="url(#arrow)"/>
+
+  <rect class="card-blue" x="230" y="456" width="260" height="58" rx="2"/>
+  <text class="label" x="360" y="480" text-anchor="middle">Glossary lock</text>
+  <text class="sub" x="360" y="500" text-anchor="middle">DTM ù CB ù Swift Tack</text>
+  <path class="arrow" d="M360 514 L360 538" marker-end="url(#arrow)"/>
+
+  <rect class="card-blue" x="120" y="540" width="220" height="70" rx="2"/>
+  <text class="label" x="230" y="568" text-anchor="middle">Residual translate</text>
+  <text class="sub" x="230" y="588" text-anchor="middle">Leftover prose only</text>
+
+  <rect class="card-blue" x="380" y="540" width="220" height="70" rx="2"/>
+  <text class="label" x="490" y="568" text-anchor="middle">Residual translate</text>
+  <text class="sub" x="490" y="588" text-anchor="middle">Cloud LLM optional</text>
+
+  <path class="arrow" d="M230 610 L230 640 L360 640 L360 664" marker-end="url(#arrow)"/>
+  <path class="arrow" d="M490 610 L490 640 L360 640"/>
+
+  <rect class="card-blue" x="200" y="666" width="320" height="58" rx="2"/>
+  <text class="label" x="360" y="690" text-anchor="middle">Bilingual factory sheet</text>
+  <text class="sub" x="360" y="710" text-anchor="middle">EN + CN cells ù digits unchanged</text>
+</svg>

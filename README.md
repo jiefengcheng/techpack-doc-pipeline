@@ -2,6 +2,10 @@
 
 One **screenshot-style** fashion tech pack in. A ruled BOM spreadsheet, an artwork crop, a drawing crop, and an **EN + CN factory sheet** out. Runs locally. No cloud API required.
 
+![Tech-pack pipeline](docs/pipeline.svg)
+
+The three cells stay the same size. **Mark → rescan** sits as a loop on top of Ruled table only.
+
 Live demo: [jiefengcheng.github.io/techpack-doc-pipeline](https://jiefengcheng.github.io/techpack-doc-pipeline/). Considered path (layout, hard OCR, domain translation): [APPROACH.md](APPROACH.md) · [live diagrams](https://jiefengcheng.github.io/techpack-doc-pipeline/approach.html). Spreadsheet: [table_bilingual.html](https://jiefengcheng.github.io/techpack-doc-pipeline/table_bilingual.html).
 
 ---

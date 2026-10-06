@@ -10,6 +10,10 @@ A fashion tech pack that is a **PNG inside a PDF** has no PDF text tokens. There
 
 Sending the whole page through OCR, or through a translator, or through a layout model alone, mixes those products. The strength of this solution is that it **does not**.
 
+![Tech-pack pipeline](docs/pipeline.svg)
+
+The three cells stay the same size. **Mark → rescan** sits as a loop on top of Ruled table only.
+
 ```mermaid
 flowchart TD
   pack[Screenshot pack]
