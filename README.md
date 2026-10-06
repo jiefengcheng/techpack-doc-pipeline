@@ -2,7 +2,24 @@
 
 One **screenshot-style** fashion tech pack in. A ruled BOM spreadsheet, an artwork crop, a drawing crop, and an **EN + CN factory sheet** out. Runs locally. No cloud API required.
 
-![Tech-pack pipeline](docs/pipeline.svg)
+```mermaid
+flowchart TD
+  pack[Screenshot pack]
+  split[Layout split]
+  pack --> split
+  split --> table["Ruled table<br/>Grid reconstruct<br/>Cell OCR"]
+  split --> art["Artwork<br/>Crop only<br/>No OCR"]
+  split --> draw["Drawing<br/>Crop<br/>Callout OCR"]
+  table -->|Mark → rescan| table
+  table --> cells[Locked BOM cells]
+  art --> cells
+  draw --> cells
+  cells --> gloss["Glossary lock<br/>DTM · CB · Swift Tack"]
+  gloss --> left["Residual translate<br/>Leftover prose only"]
+  gloss --> right["Residual translate<br/>Cloud LLM optional"]
+  left --> sheet["Bilingual factory sheet<br/>EN + CN cells · digits unchanged"]
+  right --> sheet
+```
 
 The three cells stay the same size. **Mark → rescan** sits as a loop on top of Ruled table only.
 

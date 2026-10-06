@@ -10,7 +10,24 @@ A fashion tech pack that is a **PNG inside a PDF** has no PDF text tokens. There
 
 Sending the whole page through OCR, or through a translator, or through a layout model alone, mixes those products. The strength of this solution is that it **does not**.
 
-![Tech-pack pipeline](docs/pipeline.svg)
+```mermaid
+flowchart TD
+  pack[Screenshot pack]
+  split[Layout split]
+  pack --> split
+  split --> table["Ruled table<br/>Grid reconstruct<br/>Cell OCR"]
+  split --> art["Artwork<br/>Crop only<br/>No OCR"]
+  split --> draw["Drawing<br/>Crop<br/>Callout OCR"]
+  table -->|Mark → rescan| table
+  table --> cells[Locked BOM cells]
+  art --> cells
+  draw --> cells
+  cells --> glossLock["Glossary lock<br/>DTM · CB · Swift Tack"]
+  glossLock --> left["Residual translate<br/>Leftover prose only"]
+  glossLock --> right["Residual translate<br/>Cloud LLM optional"]
+  left --> sheet[Bilingual factory sheet]
+  right --> sheet
+```
 
 The three cells stay the same size. **Mark → rescan** sits as a loop on top of Ruled table only.
 
